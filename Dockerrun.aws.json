@@ -1,0 +1,92 @@
+{
+  "AWSEBDockerrunVersion": 2,
+  "volumes": [
+    {
+      "name": "php-app",
+      "host": {
+        "sourcePath": "/var/app/current/www"
+      }
+    },
+    {
+      "name": "php-ini",
+      "host": {
+        "sourcePath": "/var/app/current/docker/php"
+      }
+    },
+    {
+      "name": "nginx-proxy-conf",
+      "host": {
+        "sourcePath": "/var/app/current/docker/nginx"
+      }
+    } 
+  ],
+  "containerDefinitions": [
+    {
+        "name": "mysql",
+        "image": "mysql:5.7",
+        "essential": true,
+        "memory": 512,
+        "portMappings": [
+            {
+                "containerPort": 3306,        
+                "hostPort": 3333
+            }
+        ],
+        "environment": [
+            {
+                "name": "MYSQL_ROOT_PASSWORD",
+                "value": "NQ8QgWPxt8J9kxFr"   
+            }
+        ]
+    },
+    {
+      "name": "php-app",
+      "image": "php:fpm",
+      "essential": true,
+      "memory": 512,
+      "mountPoints": [
+        {
+          "sourceVolume": "php-app",
+          "containerPath": "/var/www/html",
+          "readOnly": false
+        },
+        {
+          "sourceVolume": "php-ini",
+          "containerPath": "/etc/php/conf.d",
+          "readOnly": false
+        }
+      ]
+    },
+    {
+      "name": "nginx-proxy",
+      "image": "nginx",
+      "essential": true,
+      "memory": 512,
+      "portMappings": [
+        {
+          "hostPort": 80,
+          "containerPort": 80
+        }
+      ],
+      "links": [
+        "php-app"
+      ],
+      "mountPoints": [
+        {
+          "sourceVolume": "php-app",
+          "containerPath": "/var/www/html",
+          "readOnly": false
+        },
+        {
+          "sourceVolume": "nginx-proxy-conf",
+          "containerPath": "/etc/nginx/conf.d",
+          "readOnly": false
+        },
+        {
+          "sourceVolume": "awseb-logs-nginx-proxy",
+          "containerPath": "/var/log/nginx"
+        }
+      ]
+    }
+  ]
+}
