@@ -62,11 +62,12 @@
         {
           "sourceVolume": "nginx-proxy-conf",
           "containerPath": "/etc/nginx/conf.d",
-          "readOnly": false
+          "readOnly": true
         },
         {
           "sourceVolume": "awseb-logs-nginx-proxy",
-          "containerPath": "/var/log/nginx"
+          "containerPath": "/var/log/nginx",
+          "readOnly": false
         }
       ]
     }
