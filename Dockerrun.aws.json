@@ -22,24 +22,6 @@
   ],
   "containerDefinitions": [
     {
-        "name": "mysql",
-        "image": "mysql:5.7",
-        "essential": true,
-        "memory": 512,
-        "portMappings": [
-            {
-                "containerPort": 3306,        
-                "hostPort": 3333
-            }
-        ],
-        "environment": [
-            {
-                "name": "MYSQL_ROOT_PASSWORD",
-                "value": "NQ8QgWPxt8J9kxFr"   
-            }
-        ]
-    },
-    {
       "name": "php-app",
       "image": "php:fpm",
       "essential": true,
